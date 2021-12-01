@@ -9,7 +9,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import fr.seyfle.verymc.manager.InventoryManager;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -40,7 +42,30 @@ public class ListenerEvent implements Listener {
                 id++;
             }
         }
-
+        if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.NAME_TAG){
+            Inventory inv = Bukkit.createInventory(null, 54, "Sanctions.");
+            e.getPlayer().openInventory(inv);
+            ItemStack paper = new ItemStack(Material.PAPER);
+            ItemMeta paperm = paper.getItemMeta();
+            paperm.setDisplayName("&6Message");
+            paper.setItemMeta(paperm);
+            inv.setItem(1, paper);
+            ItemStack ironsword = new ItemStack(Material.IRON_SWORD);
+            ItemMeta ironswordm = ironsword.getItemMeta();
+            ironswordm.setDisplayName("&6Gameplay");
+            ironsword.setItemMeta(ironswordm);
+            inv.setItem(2, ironsword);
+            ItemStack gapple = new ItemStack(Material.GOLDEN_APPLE);
+            ItemMeta gapplem = gapple.getItemMeta();
+            gapplem.setDisplayName("&6Triche");
+            gapple.setItemMeta(gapplem);
+            inv.setItem(3, gapple);
+            ItemStack lavab = new ItemStack(Material.LAVA_BUCKET);
+            ItemMeta lavabm = lavab.getItemMeta();
+            lavabm.setDisplayName("&6Abus");
+            lavab.setItemMeta(lavabm);
+            inv.setItem(4, lavab);
+        }
     }
     public void onJoinEvent(PlayerJoinEvent e){
         for (String p : Vanish) e.getPlayer().hidePlayer(Bukkit.getPlayer(p));
