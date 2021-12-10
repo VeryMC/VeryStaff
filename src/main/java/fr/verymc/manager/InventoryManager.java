@@ -1,4 +1,4 @@
-package fr.seyfle.verymc.manager;
+package fr.verymc.manager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

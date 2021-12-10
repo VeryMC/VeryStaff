@@ -1,6 +1,6 @@
-package fr.seyfle.verymc.Commands;
+package fr.verymc.Commands;
 
-import fr.seyfle.verymc.manager.InventoryManager;
+import fr.verymc.manager.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

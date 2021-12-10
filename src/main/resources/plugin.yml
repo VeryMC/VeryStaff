@@ -1,8 +1,9 @@
 name: VeryStaff
 version: '${project.version}'
-main: fr.seyfle.verymc.Main
-api-version: 1.17
+main: fr.verymc.Main
 authors: [ seyfle ]
 commands:
   mod:
     permission: mod.use
+  cps:
+    permission: cps.use

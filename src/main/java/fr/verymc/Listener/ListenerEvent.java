@@ -1,34 +1,37 @@
-package fr.seyfle.verymc.Listener;
+package fr.verymc.Listener;
 
+import fr.verymc.Commands.CommandCps;
+import fr.verymc.Commands.CommandMod;
+import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import fr.seyfle.verymc.manager.InventoryManager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-
-import static fr.seyfle.verymc.Commands.CommandMod.Vanish;
-
 public class ListenerEvent implements Listener {
 
+    @EventHandler
     public void onInteractEvent(PlayerInteractEvent e){
+        if(CommandCps.inTest.containsKey(e.getPlayer())){
+            CommandCps.inTest.put(e.getPlayer(), CommandCps.inTest.get(e.getPlayer()));
+        }
         if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.GREEN_RECORD){
-            if(!Vanish.contains(e.getPlayer().getName())){
-                Vanish.add(e.getPlayer().getName());
+            if(!CommandMod.Vanish.contains(e.getPlayer().getName())){
+                CommandMod.Vanish.add(e.getPlayer().getName());
                 for (Player p : Bukkit.getOnlinePlayers()){
                     p.hidePlayer(e.getPlayer());
                 }
                 return;
             }else {
-                Vanish.remove(e.getPlayer().getName());
+                CommandMod.Vanish.remove(e.getPlayer().getName());
                 for (Player p : Bukkit.getOnlinePlayers()){
                     p.showPlayer(e.getPlayer());
                 }
@@ -67,10 +70,12 @@ public class ListenerEvent implements Listener {
             inv.setItem(4, lavab);
         }
     }
+    @EventHandler
     public void onJoinEvent(PlayerJoinEvent e){
-        for (String p : Vanish) e.getPlayer().hidePlayer(Bukkit.getPlayer(p));
+        for (String p : CommandMod.Vanish) e.getPlayer().hidePlayer(Bukkit.getPlayer(p));
     }
+    @EventHandler
     public void onLeaveEvent(PlayerQuitEvent e){
-        for (String p : Vanish) e.getPlayer().showPlayer(Bukkit.getPlayer(p));
+        for (String p : CommandMod.Vanish) e.getPlayer().showPlayer(Bukkit.getPlayer(p));
     }
 }

@@ -1,18 +1,23 @@
-package fr.seyfle.verymc;
+package fr.verymc;
 
-import fr.seyfle.verymc.Commands.CommandMod;
-import fr.seyfle.verymc.Listener.ListenerEvent;
-import fr.seyfle.verymc.manager.InventoryManager;
+import fr.verymc.Commands.CommandCps;
+import fr.verymc.Commands.CommandMod;
+import fr.verymc.Listener.ListenerEvent;
+import fr.verymc.manager.InventoryManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
+    public static Main instance;
+
     @Override
     public void onEnable() {
+        instance = this;
         System.out.println("PLugin VeryStaff on");
         new InventoryManager();
         getServer().getPluginManager().registerEvents(new ListenerEvent(), this);
         getCommand("mod").setExecutor(new CommandMod());
+        getCommand("cps").setExecutor(new CommandCps());
 
     }
 

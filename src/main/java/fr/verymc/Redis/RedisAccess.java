@@ -1,4 +1,4 @@
-package fr.seyfle.verymc.Redis;
+package fr.verymc.Redis;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

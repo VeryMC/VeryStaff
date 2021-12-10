@@ -1,4 +1,4 @@
-package fr.seyfle.verymc.Redis;
+package fr.verymc.Redis;
 
 public class RedisCredentials {
     private final String address;
