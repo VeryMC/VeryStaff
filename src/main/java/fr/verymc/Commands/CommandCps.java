@@ -11,13 +11,14 @@ import java.util.HashMap;
 
 public class CommandCps implements CommandExecutor {
 
-    public static HashMap<Player, Integer> inTest = new HashMap < > ();
+    public static HashMap<String, Integer> inTest = new HashMap < > ();
 
-    public void RemoveFrom(Player player, Player requester){
+    public void RemoveFrom(String player, Player requester){
+        requester.sendMessage("§6Le test a été lancé avec succès, les résultats seront disponnibles dans environ 2 secondes.");
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
             public void run() {
                 if(inTest.containsKey(player)){
-                    requester.sendMessage("§6Résultats du test cps sur "+player.getName()+", moyenne sur 2 secondes: "+
+                    requester.sendMessage("§6Résultats du test cps sur "+player+", moyenne sur 2 secondes: "+
                             inTest.get(player)/2);
                     inTest.remove(player);
                 }
@@ -39,10 +40,10 @@ public class CommandCps implements CommandExecutor {
         if(Bukkit.getPlayer(args[0]) != null){
             if(Bukkit.getPlayer(args[0]).isOnline()){
                 Player player = Bukkit.getPlayer(args[0]);
-                if(!inTest.containsKey(player)){
-                    inTest.put(player, 0);
-                    RemoveFrom(player, (Player) sender);
-                } else{
+                if(!inTest.containsKey(player.getName())){
+                    inTest.put(player.getName(), 0);
+                    RemoveFrom(player.getName(), (Player) sender);
+                } else {
                     sender.sendMessage("§cErreur, ce joueur est déjà en test !");
                 }
             } else{

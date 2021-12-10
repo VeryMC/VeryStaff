@@ -20,8 +20,10 @@ public class ListenerEvent implements Listener {
 
     @EventHandler
     public void onInteractEvent(PlayerInteractEvent e){
-        if(CommandCps.inTest.containsKey(e.getPlayer())){
-            CommandCps.inTest.put(e.getPlayer(), CommandCps.inTest.get(e.getPlayer()));
+        if(CommandCps.inTest.containsKey(e.getPlayer().getName())){
+            if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
+                CommandCps.inTest.put(e.getPlayer().getName(), CommandCps.inTest.get(e.getPlayer().getName()) + 1);
+            }
         }
         if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.GREEN_RECORD){
             if(!CommandMod.Vanish.contains(e.getPlayer().getName())){
