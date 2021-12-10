@@ -21,6 +21,9 @@ public class ListenerEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInteractEvent(PlayerInteractEvent e){
+        if(!e.getPlayer().hasPermission("mod.use")){
+            return;
+        }
         if (CommandCps.inTestright.containsKey(e.getPlayer().getName()) && CommandCps.inTestleft.containsKey(e.getPlayer().getName())) {
             if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
                 CommandCps.inTestright.put(e.getPlayer().getName(), CommandCps.inTestright.get(e.getPlayer().getName()) + 1);
