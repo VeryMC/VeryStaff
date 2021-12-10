@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,11 +19,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class ListenerEvent implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onInteractEvent(PlayerInteractEvent e){
-        if(CommandCps.inTest.containsKey(e.getPlayer().getName())){
+        if (CommandCps.inTestright.containsKey(e.getPlayer().getName()) && CommandCps.inTestleft.containsKey(e.getPlayer().getName())) {
             if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
-                CommandCps.inTest.put(e.getPlayer().getName(), CommandCps.inTest.get(e.getPlayer().getName()) + 1);
+                CommandCps.inTestright.put(e.getPlayer().getName(), CommandCps.inTestright.get(e.getPlayer().getName()) + 1);
+                return;
+            }
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+                CommandCps.inTestleft.put(e.getPlayer().getName(), CommandCps.inTestleft.get(e.getPlayer().getName()) + 1);
+                return;
             }
         }
         if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.GREEN_RECORD){
