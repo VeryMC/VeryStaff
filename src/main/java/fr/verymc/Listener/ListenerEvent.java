@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -17,43 +18,105 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class ListenerEvent implements Listener {
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void InteractAtEntity(PlayerInteractAtEntityEvent e){
+        if(!e.getPlayer().hasPermission("mod.use")){
+            return;
+        }
+        if(!(e.getRightClicked() instanceof Player)){
+            return;
+        }
+        Player player = e.getPlayer();
+
+        if(player.getItemInHand().getType() != Material.WATCH && player.getItemInHand().getType() != Material.STICK
+        && player.getItemInHand().getType() != Material.BLAZE_ROD){
+            return;
+        }
+
+        Player p = (Player) e.getRightClicked();
+
+        if(player.getItemInHand().getType() == Material.WATCH) {
+            player.chat("/cps " + p.getName());
+        }
+        if(player.getItemInHand().getType() == Material.STICK){
+            e.setCancelled(false);
+        }
+        if(player.getItemInHand().getType() == Material.BLAZE_ROD){
+            player.getWorld().createExplosion(player.getLocation().add(0,-0.5,0), 4,false);
+        }
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInteractEvent(PlayerInteractEvent e){
         if(!e.getPlayer().hasPermission("mod.use")){
             return;
         }
-        if (CommandCps.inTestright.containsKey(e.getPlayer().getName()) && CommandCps.inTestleft.containsKey(e.getPlayer().getName())) {
+        Player player = e.getPlayer();
+        if (CommandCps.inTestright.containsKey(player.getName()) && CommandCps.inTestleft.containsKey(player.getName())) {
             if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
-                CommandCps.inTestright.put(e.getPlayer().getName(), CommandCps.inTestright.get(e.getPlayer().getName()) + 1);
+                CommandCps.inTestright.put(player.getName(), CommandCps.inTestright.get(player.getName()) + 1);
                 return;
             }
             if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
-                CommandCps.inTestleft.put(e.getPlayer().getName(), CommandCps.inTestleft.get(e.getPlayer().getName()) + 1);
+                CommandCps.inTestleft.put(player.getName(), CommandCps.inTestleft.get(player.getName()) + 1);
                 return;
             }
         }
-        if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.GREEN_RECORD){
+        if(e.getMaterial() == Material.INK_SACK){
             if(!CommandMod.Vanish.contains(e.getPlayer().getName())){
-                CommandMod.Vanish.add(e.getPlayer().getName());
-                for (Player p : Bukkit.getOnlinePlayers()){
-                    p.hidePlayer(e.getPlayer());
-                }
+                CommandMod.setVanish(player, true);
+                player.sendMessage("§6§lModération §8» §fVanish §aactivé §f!");
+                ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 10);
+                ItemMeta a = item.getItemMeta();
+                a.setDisplayName("§aVanish actif");
+                item.setItemMeta(a);
+                player.getInventory().setItemInHand(item);
                 return;
-            }else {
-                CommandMod.Vanish.remove(e.getPlayer().getName());
-                for (Player p : Bukkit.getOnlinePlayers()){
-                    p.showPlayer(e.getPlayer());
-                }
+            } else {
+                CommandMod.setVanish(player, false);
+                player.sendMessage("§6§lModération §8» §fVanish §cdéactivé §f!");
+                ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 8);
+                ItemMeta a = item.getItemMeta();
+                a.setDisplayName("§cVanish inactif");
+                item.setItemMeta(a);
+                player.getInventory().setItemInHand(item);
                 return;
             }
         }
-        if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.REDSTONE){
+        if(e.getMaterial() == Material.REDSTONE){
+            player.chat("/mod");
             int id = 0;
             for(ItemStack i : InventoryManager.getInvManager().getModInventory(e.getPlayer())) {
                 e.getPlayer().getInventory().setItem(id,i );
                 id++;
+            }
+        }
+        if(e.getMaterial() == Material.ARROW){
+            ArrayList joueurs = new ArrayList();
+            for(Player p : Bukkit.getOnlinePlayers()){
+                if(player == p){
+                    continue;
+                }
+                if(CommandMod.IsinMod.contains(p)){
+                    continue;
+                }
+                joueurs.add(p.getName());
+            }
+            if(joueurs.size() == 0){
+                player.sendMessage("§6§lModération §8» §fIl n'y a personne sur qui se téléporter !");
+                return;
+            }
+            Random number = new Random();
+            int a = number.nextInt(joueurs.size()-1);
+            if(joueurs.get(a) != null){
+                player.teleport(Bukkit.getPlayer((String) joueurs.get(a)).getLocation());
+            } else if(joueurs.get(0) != null){
+                player.teleport(Bukkit.getPlayer((String) joueurs.get(0)).getLocation());
             }
         }
         if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.NAME_TAG){

@@ -1,7 +1,7 @@
 name: VeryStaff
 version: '${project.version}'
 main: fr.verymc.Main
-authors: [ seyfle ]
+authors: [ Farmeurimmo, seyfle ]
 commands:
   mod:
     permission: mod.use
