@@ -46,7 +46,7 @@ public class ListenerEvent implements Listener {
 
         if(player.getItemInHand().getType() != Material.WATCH && player.getItemInHand().getType() != Material.STICK
         && player.getItemInHand().getType() != Material.BLAZE_ROD && player.getItemInHand().getType() != Material.CHEST
-        && player.getItemInHand().getType() != Material.PACKED_ICE){
+        && player.getItemInHand().getType() != Material.PACKED_ICE && player.getItemInHand().getType() != Material.NAME_TAG){
             return;
         }
 
@@ -72,6 +72,9 @@ public class ListenerEvent implements Listener {
             } else {
                 Freezed.remove(p.getName());
             }
+        }
+        if(player.getItemInHand().getType() == Material.NAME_TAG){
+            player.chat("/s "+p.getName());
         }
     }
 
@@ -143,30 +146,6 @@ public class ListenerEvent implements Listener {
             } else if(joueurs.get(0) != null){
                 player.teleport(Bukkit.getPlayer((String) joueurs.get(0)).getLocation());
             }
-        }
-        if(e.getAction() == Action.RIGHT_CLICK_AIR && e.getMaterial() == Material.NAME_TAG){
-            Inventory inv = Bukkit.createInventory(null, 54, "Sanctions.");
-            e.getPlayer().openInventory(inv);
-            ItemStack paper = new ItemStack(Material.PAPER);
-            ItemMeta paperm = paper.getItemMeta();
-            paperm.setDisplayName("&6Message");
-            paper.setItemMeta(paperm);
-            inv.setItem(1, paper);
-            ItemStack ironsword = new ItemStack(Material.IRON_SWORD);
-            ItemMeta ironswordm = ironsword.getItemMeta();
-            ironswordm.setDisplayName("&6Gameplay");
-            ironsword.setItemMeta(ironswordm);
-            inv.setItem(2, ironsword);
-            ItemStack gapple = new ItemStack(Material.GOLDEN_APPLE);
-            ItemMeta gapplem = gapple.getItemMeta();
-            gapplem.setDisplayName("&6Triche");
-            gapple.setItemMeta(gapplem);
-            inv.setItem(3, gapple);
-            ItemStack lavab = new ItemStack(Material.LAVA_BUCKET);
-            ItemMeta lavabm = lavab.getItemMeta();
-            lavabm.setDisplayName("&6Abus");
-            lavab.setItemMeta(lavabm);
-            inv.setItem(4, lavab);
         }
     }
     @EventHandler
