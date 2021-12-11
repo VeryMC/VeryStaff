@@ -14,7 +14,15 @@ import java.util.Arrays;
 public class SanctionGuiCreator {
 
     public static void MakeMainSGUI(Player player){
-        Inventory inv = Bukkit.createInventory(null, 27, "§7Sanctions pour "+ CommandS.target.get(player.getName()));
+        String cible = CommandS.target.get(player.getName());
+        Inventory inv = Bukkit.createInventory(null, 27, "§8Sanctions pour "+ CommandS.target.get(player.getName()));
+
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+        ItemMeta meta = stack.getItemMeta();
+        ((SkullMeta) meta).setOwner(cible);
+        meta.setDisplayName("§6" + cible);
+        stack.setItemMeta(meta);
+        inv.setItem(13, stack);
 
         ItemStack paper = new ItemStack(Material.PAPER);
         ItemMeta paperm = paper.getItemMeta();
@@ -26,13 +34,13 @@ public class SanctionGuiCreator {
         ItemMeta ironswordm = ironsword.getItemMeta();
         ironswordm.setDisplayName("§6Bans");
         ironsword.setItemMeta(ironswordm);
-        inv.setItem(12, ironsword);
+        inv.setItem(11, ironsword);
 
         ItemStack gapple = new ItemStack(Material.BOW);
         ItemMeta gapplem = gapple.getItemMeta();
         gapplem.setDisplayName("§6Bans-ip");
         gapple.setItemMeta(gapplem);
-        inv.setItem(14, gapple);
+        inv.setItem(15, gapple);
 
         ItemStack lavab = new ItemStack(Material.BEACON);
         ItemMeta lavabm = lavab.getItemMeta();
@@ -45,24 +53,15 @@ public class SanctionGuiCreator {
 
     public static void MakeMuteGUI(Player player){
         String cible = CommandS.target.get(player.getName());
-        Inventory inv = Bukkit.createInventory(null, 27, "§7Mutes pour "+cible);
+        Inventory inv = Bukkit.createInventory(null, 27, "§8Mutes pour "+cible);
 
-        if (player.hasPermission("s.base.banip")) {
-                ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-                ItemMeta meta = stack.getItemMeta();
-                ((SkullMeta) meta).setOwner(cible);
-                meta.setDisplayName("§6" + cible);
-                meta.setLore(Arrays.asList("§7"+player.getAddress().getHostName()));
-                stack.setItemMeta(meta);
-                inv.setItem(13, stack);
-        } else {
-                ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-                ItemMeta meta = stack.getItemMeta();
-                ((SkullMeta) meta).setOwner(cible);
-                meta.setDisplayName("§6" + cible);
-                stack.setItemMeta(meta);
-                inv.setItem(13, stack);
-        }
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+        ItemMeta meta = stack.getItemMeta();
+        ((SkullMeta) meta).setOwner(cible);
+        meta.setDisplayName("§6" + cible);
+        stack.setItemMeta(meta);
+        inv.setItem(13, stack);
+
         ItemStack custom1 = new ItemStack(Material.BOW, 1);
         ItemMeta customS = custom1.getItemMeta();
         customS.setDisplayName("§6Spam (20 minutes)");
@@ -122,24 +121,14 @@ public class SanctionGuiCreator {
     }
     public static void makeBanGUI(Player player){
         String cible = CommandS.target.get(player.getName());
-        Inventory inv = Bukkit.createInventory(null, 27, "§7Bans pour "+cible);
+        Inventory inv = Bukkit.createInventory(null, 27, "§8Bans pour "+cible);
 
-        if (player.hasPermission("s.base.banip")) {
-            ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            ItemMeta meta = stack.getItemMeta();
-            ((SkullMeta) meta).setOwner(cible);
-            meta.setDisplayName("§6" + cible);
-            meta.setLore(Arrays.asList("§7"+player.getAddress().getHostName()));
-            stack.setItemMeta(meta);
-            inv.setItem(13, stack);
-        } else {
-            ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            ItemMeta meta = stack.getItemMeta();
-            ((SkullMeta) meta).setOwner(cible);
-            meta.setDisplayName("§6" + cible);
-            stack.setItemMeta(meta);
-            inv.setItem(13, stack);
-        }
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+        ItemMeta meta = stack.getItemMeta();
+        ((SkullMeta) meta).setOwner(cible);
+        meta.setDisplayName("§6" + cible);
+        stack.setItemMeta(meta);
+        inv.setItem(13, stack);
 
         ItemStack custom1 = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta customS = custom1.getItemMeta();
@@ -212,24 +201,14 @@ public class SanctionGuiCreator {
     }
     public static void MakeBanIpGui(Player player){
         String cible = CommandS.target.get(player.getName());
-        Inventory inv = Bukkit.createInventory(null, 27, "§7Bans-ip pour "+cible);
+        Inventory inv = Bukkit.createInventory(null, 27, "§8Bans-ip pour "+cible);
 
-        if (player.hasPermission("s.base.banip")) {
-            ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            ItemMeta meta = stack.getItemMeta();
-            ((SkullMeta) meta).setOwner(cible);
-            meta.setDisplayName("§6" + cible);
-            meta.setLore(Arrays.asList("§7"+player.getAddress().getHostName()));
-            stack.setItemMeta(meta);
-            inv.setItem(13, stack);
-        } else {
-            ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            ItemMeta meta = stack.getItemMeta();
-            ((SkullMeta) meta).setOwner(cible);
-            meta.setDisplayName("§6" + cible);
-            stack.setItemMeta(meta);
-            inv.setItem(13, stack);
-        }
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+        ItemMeta meta = stack.getItemMeta();
+        ((SkullMeta) meta).setOwner(cible);
+        meta.setDisplayName("§6" + cible);
+        stack.setItemMeta(meta);
+        inv.setItem(13, stack);
 
         ItemStack custom1 = new ItemStack(Material.NAME_TAG, 1);
         ItemMeta customS = custom1.getItemMeta();
@@ -254,24 +233,15 @@ public class SanctionGuiCreator {
     }
     public static void MakeBlanchissementGUI(Player player){
         String cible = CommandS.target.get(player.getName());
-        Inventory inv = Bukkit.createInventory(null, 27, "§7Bans-ip pour "+cible);
+        Inventory inv = Bukkit.createInventory(null, 27, "§8Blanchissements pour "+cible);
 
-        if (player.hasPermission("s.base.banip")) {
-            ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            ItemMeta meta = stack.getItemMeta();
-            ((SkullMeta) meta).setOwner(cible);
-            meta.setDisplayName("§6" + cible);
-            meta.setLore(Arrays.asList("§7"+player.getAddress().getHostName()));
-            stack.setItemMeta(meta);
-            inv.setItem(13, stack);
-        } else {
-            ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            ItemMeta meta = stack.getItemMeta();
-            ((SkullMeta) meta).setOwner(cible);
-            meta.setDisplayName("§6" + cible);
-            stack.setItemMeta(meta);
-            inv.setItem(13, stack);
-        }
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+        ItemMeta meta = stack.getItemMeta();
+        ((SkullMeta) meta).setOwner(cible);
+        meta.setDisplayName("§6" + cible);
+        stack.setItemMeta(meta);
+        inv.setItem(13, stack);
+
         ItemStack custom1 = new ItemStack(Material.PAPER, 1);
         ItemMeta customS = custom1.getItemMeta();
         customS.setDisplayName("§6Démute");

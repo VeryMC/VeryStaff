@@ -55,17 +55,34 @@ public class InventoryManager implements Listener {
         if(current.getItemMeta() == null){
             return;
         }
-        if(current.getType() == Material.PAPER){
-            SanctionGuiCreator.MakeMuteGUI(player);
+        if(current.getType() == Material.IRON_DOOR){
+            SanctionGuiCreator.MakeMainSGUI(player);
         }
-        if(current.getType() == Material.ARROW){
-            SanctionGuiCreator.makeBanGUI(player);
+        if(e.getView().getTitle().contains("Sanctions")) {
+            if (current.getType() == Material.PAPER) {
+                SanctionGuiCreator.MakeMuteGUI(player);
+            }
+            if (current.getType() == Material.ARROW) {
+                SanctionGuiCreator.makeBanGUI(player);
+            }
+            if (current.getType() == Material.BOW) {
+                SanctionGuiCreator.MakeBanIpGui(player);
+            }
+            if (current.getType() == Material.BEACON) {
+                SanctionGuiCreator.MakeBlanchissementGUI(player);
+            }
         }
-        if(current.getType() == Material.BOW){
-            SanctionGuiCreator.MakeBanIpGui(player);
+        if(e.getView().getTitle().contains("Mutes")){
+
         }
-        if(current.getType() == Material.BEACON){
-            SanctionGuiCreator.MakeBlanchissementGUI(player);
+        if(e.getView().getTitle().contains("Bans")){
+
+        }
+        if(e.getView().getTitle().contains("Bans-ip")){
+
+        }
+        if(e.getView().getTitle().contains("Blanchissement")){
+
         }
     }
 }

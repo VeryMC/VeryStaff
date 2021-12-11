@@ -24,7 +24,8 @@ public class CommandS implements CommandExecutor {
             return true;
         }
         if(args[0]==null || args[0].length() < 4){
-            player.sendMessage("§6§lModération §8» §cErreur, pseudo incorrecte !");
+            player.sendMessage("§6§lModération §8» §cErreur, pseudo incorrect !");
+            return true;
         }
         if(target.containsKey(player.getName())){
             target.remove(player.getName());
