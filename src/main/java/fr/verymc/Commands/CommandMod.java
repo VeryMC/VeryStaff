@@ -1,6 +1,7 @@
 package fr.verymc.Commands;
 
 import fr.verymc.manager.InventoryManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,10 +16,24 @@ import java.util.ArrayList;
 public class CommandMod implements CommandExecutor {
     public static ArrayList<String> IsinMod = new ArrayList<String>();
     public static ArrayList<String> Vanish = new ArrayList<String>();
+
+    public static void setVanish(Player player, Boolean ison){
+        if(ison==false){
+            CommandMod.Vanish.remove(player.getName());
+            for (Player p : Bukkit.getOnlinePlayers()){
+                p.showPlayer(player);
+            }
+        } else{
+            CommandMod.Vanish.add(player.getName());
+            for (Player p : Bukkit.getOnlinePlayers()){
+                p.hidePlayer(player);
+            }
+        }
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        InventoryManager.getInvManager().addInventoryMod(player);
         if(!player.hasPermission("mod.use")){
             player.sendMessage("§4 Vous n'avez pas la permission d'éxécuter cette commande");
             return true;
@@ -26,9 +41,22 @@ public class CommandMod implements CommandExecutor {
         if(IsinMod.contains(player.getName())){
             player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
             player.getInventory().clear();
+            player.setAllowFlight(false);
+            player.setFlying(false);
+            setVanish(player, false);
+            player.setNoDamageTicks(1);
             IsinMod.remove(player.getName());
+            InventoryManager.getInvManager().restoreInv(player);
         } else {
+            InventoryManager.getInvManager().saveInv(player);
+
+            player.setAllowFlight(true);
+            player.setFlying(true);
+
+            player.setNoDamageTicks(999999999);
+
             player.getInventory().clear();
+
             ItemStack watch = new ItemStack(Material.WATCH);
             ItemMeta watchm = watch.getItemMeta();
             watchm.setDisplayName("§aCPS Test");
@@ -45,13 +73,19 @@ public class CommandMod implements CommandExecutor {
             ItemMeta packedicem = packedice.getItemMeta();
             packedicem.setDisplayName("§bGel");
             packedice.setItemMeta(packedicem);
-            player.getInventory().setItem(3, packedice);
+            player.getInventory().setItem(2, packedice);
+
+            ItemStack blazerod = new ItemStack(Material.BLAZE_ROD);
+            ItemMeta blazerodm = blazerod.getItemMeta();
+            blazerodm.setDisplayName("§cKnockback explosion");
+            blazerod.setItemMeta(blazerodm);
+            player.getInventory().setItem(3, blazerod);
 
             ItemStack stick = new ItemStack(Material.STICK);
             ItemMeta stickm = stick.getItemMeta();
             stickm.addEnchant(Enchantment.KNOCKBACK, 5, false);
             stickm.addEnchant(Enchantment.DURABILITY, 10, false);
-            stickm.setDisplayName("§aKnockback");
+            stickm.setDisplayName("§aKnockback coups");
             stick.setItemMeta(stickm);
             player.getInventory().setItem(4, stick);
 
@@ -67,9 +101,9 @@ public class CommandMod implements CommandExecutor {
             nametag.setItemMeta(nametagm);
             player.getInventory().setItem(6, nametag);
 
-            ItemStack greendye = new ItemStack(Material.GREEN_RECORD);
+            ItemStack greendye = new ItemStack(Material.INK_SACK, 1, (short) 10);
             ItemMeta greendyem = greendye.getItemMeta();
-            greendyem.setDisplayName("§4Vanish");
+            greendyem.setDisplayName("§aVanish actif");
             greendye.setItemMeta(greendyem);
             player.getInventory().setItem(7, greendye);
 
@@ -80,6 +114,7 @@ public class CommandMod implements CommandExecutor {
             player.getInventory().setItem(8, redstone);
 
             player.sendMessage("§6§lModération §8» §fVous §aentrez §fen mode Modération !");
+            setVanish(player, true);
             IsinMod.add(player.getName());
         }
 
