@@ -34,7 +34,6 @@ public class CommandMod implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
-        InventoryManager.getInvManager().addInventoryMod(player);
         if(!player.hasPermission("mod.use")){
             player.sendMessage("§4 Vous n'avez pas la permission d'éxécuter cette commande");
             return true;
@@ -42,10 +41,22 @@ public class CommandMod implements CommandExecutor {
         if(IsinMod.contains(player.getName())){
             player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
             player.getInventory().clear();
+            player.setAllowFlight(false);
+            player.setFlying(false);
             setVanish(player, false);
+            player.setNoDamageTicks(1);
             IsinMod.remove(player.getName());
+            InventoryManager.getInvManager().restoreInv(player);
         } else {
+            InventoryManager.getInvManager().saveInv(player);
+
+            player.setAllowFlight(true);
+            player.setFlying(true);
+
+            player.setNoDamageTicks(999999999);
+
             player.getInventory().clear();
+
             ItemStack watch = new ItemStack(Material.WATCH);
             ItemMeta watchm = watch.getItemMeta();
             watchm.setDisplayName("§aCPS Test");

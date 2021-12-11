@@ -2,7 +2,6 @@ package fr.verymc.Listener;
 
 import fr.verymc.Commands.CommandCps;
 import fr.verymc.Commands.CommandMod;
-import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,10 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,6 +18,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ListenerEvent implements Listener {
+
+    public static ArrayList<String> Freezed = new ArrayList<String>();
+
+    @EventHandler
+    public void PlayerMove(PlayerMoveEvent e){
+        if(Freezed.contains(e.getPlayer().getName())){
+            e.setCancelled(true);
+        }
+    }
+    @EventHandler
+    public void PreCommand(PlayerCommandPreprocessEvent e){
+        if(Freezed.contains(e.getPlayer().getName())){
+            e.setCancelled(true);
+        }
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void InteractAtEntity(PlayerInteractAtEntityEvent e){
@@ -34,7 +45,8 @@ public class ListenerEvent implements Listener {
         Player player = e.getPlayer();
 
         if(player.getItemInHand().getType() != Material.WATCH && player.getItemInHand().getType() != Material.STICK
-        && player.getItemInHand().getType() != Material.BLAZE_ROD){
+        && player.getItemInHand().getType() != Material.BLAZE_ROD && player.getItemInHand().getType() != Material.CHEST
+        && player.getItemInHand().getType() != Material.PACKED_ICE){
             return;
         }
 
@@ -49,10 +61,25 @@ public class ListenerEvent implements Listener {
         if(player.getItemInHand().getType() == Material.BLAZE_ROD){
             player.getWorld().createExplosion(player.getLocation().add(0,-0.5,0), 4,false);
         }
+        if(player.getItemInHand().getType() == Material.CHEST){
+            Inventory inv = Bukkit.createInventory(null, 54, p.getName());
+            inv.setContents(p.getInventory().getContents());
+            player.openInventory(inv);
+        }
+        if(player.getItemInHand().getType() == Material.PACKED_ICE){
+            if(!Freezed.contains(p.getName())) {
+                Freezed.add(p.getName());
+            } else {
+                Freezed.remove(p.getName());
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInteractEvent(PlayerInteractEvent e){
+        if(Freezed.contains(e.getPlayer().getName())){
+            e.setCancelled(true);
+        }
         if(!e.getPlayer().hasPermission("mod.use")){
             return;
         }
@@ -66,6 +93,9 @@ public class ListenerEvent implements Listener {
                 CommandCps.inTestleft.put(player.getName(), CommandCps.inTestleft.get(player.getName()) + 1);
                 return;
             }
+        }
+        if(!CommandMod.IsinMod.contains(player.getName())){
+            return;
         }
         if(e.getMaterial() == Material.INK_SACK){
             if(!CommandMod.Vanish.contains(e.getPlayer().getName())){
@@ -90,11 +120,6 @@ public class ListenerEvent implements Listener {
         }
         if(e.getMaterial() == Material.REDSTONE){
             player.chat("/mod");
-            int id = 0;
-            for(ItemStack i : InventoryManager.getInvManager().getModInventory(e.getPlayer())) {
-                e.getPlayer().getInventory().setItem(id,i );
-                id++;
-            }
         }
         if(e.getMaterial() == Material.ARROW){
             ArrayList joueurs = new ArrayList();
@@ -150,6 +175,8 @@ public class ListenerEvent implements Listener {
     }
     @EventHandler
     public void onLeaveEvent(PlayerQuitEvent e){
-        for (String p : CommandMod.Vanish) e.getPlayer().showPlayer(Bukkit.getPlayer(p));
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            e.getPlayer().chat("/mod");
+        }
     }
 }
