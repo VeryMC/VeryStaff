@@ -3,6 +3,7 @@ package fr.verymc.manager;
 import fr.verymc.Commands.CommandMod;
 import fr.verymc.Commands.CommandS;
 import fr.verymc.Listener.ListenerEvent;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,9 +42,6 @@ public class InventoryManager implements Listener {
     @EventHandler
     public void InventoryClickEvent(InventoryClickEvent e){
         Player player = (Player) e.getWhoClicked();
-        if(!CommandMod.IsinMod.contains(player.getName())){
-            return;
-        }
         if(!CommandS.target.containsKey(player.getName())){
             return;
         }
@@ -56,6 +54,18 @@ public class InventoryManager implements Listener {
         }
         if(current.getItemMeta() == null){
             return;
+        }
+        if(current.getType() == Material.PAPER){
+            SanctionGuiCreator.MakeMuteGUI(player);
+        }
+        if(current.getType() == Material.ARROW){
+            SanctionGuiCreator.makeBanGUI(player);
+        }
+        if(current.getType() == Material.BOW){
+            SanctionGuiCreator.MakeBanIpGui(player);
+        }
+        if(current.getType() == Material.BEACON){
+            SanctionGuiCreator.MakeBlanchissementGUI(player);
         }
     }
 }
