@@ -75,17 +75,11 @@ public class CommandMod implements CommandExecutor {
             packedice.setItemMeta(packedicem);
             player.getInventory().setItem(2, packedice);
 
-            ItemStack blazerod = new ItemStack(Material.BLAZE_ROD);
-            ItemMeta blazerodm = blazerod.getItemMeta();
-            blazerodm.setDisplayName("§cKnockback explosion");
-            blazerod.setItemMeta(blazerodm);
-            player.getInventory().setItem(3, blazerod);
-
             ItemStack stick = new ItemStack(Material.STICK);
             ItemMeta stickm = stick.getItemMeta();
-            stickm.addEnchant(Enchantment.KNOCKBACK, 5, false);
-            stickm.addEnchant(Enchantment.DURABILITY, 10, false);
-            stickm.setDisplayName("§aKnockback coups");
+            stick.addUnsafeEnchantment(Enchantment.KNOCKBACK, 5);
+            stickm.setDisplayName("§aKnockback 5");
+            stickm.spigot().setUnbreakable(true);
             stick.setItemMeta(stickm);
             player.getInventory().setItem(4, stick);
 

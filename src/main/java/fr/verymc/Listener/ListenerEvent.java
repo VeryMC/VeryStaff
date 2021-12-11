@@ -45,7 +45,7 @@ public class ListenerEvent implements Listener {
         Player player = e.getPlayer();
 
         if(player.getItemInHand().getType() != Material.WATCH && player.getItemInHand().getType() != Material.STICK
-        && player.getItemInHand().getType() != Material.BLAZE_ROD && player.getItemInHand().getType() != Material.CHEST
+                && player.getItemInHand().getType() != Material.CHEST
         && player.getItemInHand().getType() != Material.PACKED_ICE && player.getItemInHand().getType() != Material.NAME_TAG){
             return;
         }
@@ -57,9 +57,6 @@ public class ListenerEvent implements Listener {
         }
         if(player.getItemInHand().getType() == Material.STICK){
             e.setCancelled(false);
-        }
-        if(player.getItemInHand().getType() == Material.BLAZE_ROD){
-            player.getWorld().createExplosion(p.getLocation().add(0,-0.5,0), 8,false);
         }
         if(player.getItemInHand().getType() == Material.CHEST){
             Inventory inv = Bukkit.createInventory(null, 54, p.getName());
