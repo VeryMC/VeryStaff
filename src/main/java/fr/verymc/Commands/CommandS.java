@@ -21,25 +21,25 @@ public class CommandS implements CommandExecutor {
 
         ItemStack paper = new ItemStack(Material.PAPER);
         ItemMeta paperm = paper.getItemMeta();
-        paperm.setDisplayName("§6Message");
+        paperm.setDisplayName("§6Mutes");
         paper.setItemMeta(paperm);
         inv.setItem(10, paper);
 
-        ItemStack ironsword = new ItemStack(Material.IRON_SWORD);
+        ItemStack ironsword = new ItemStack(Material.ARROW);
         ItemMeta ironswordm = ironsword.getItemMeta();
-        ironswordm.setDisplayName("§6Gameplay");
+        ironswordm.setDisplayName("§6Bans");
         ironsword.setItemMeta(ironswordm);
         inv.setItem(12, ironsword);
 
-        ItemStack gapple = new ItemStack(Material.GOLDEN_APPLE);
+        ItemStack gapple = new ItemStack(Material.BOW);
         ItemMeta gapplem = gapple.getItemMeta();
-        gapplem.setDisplayName("§6Triche");
+        gapplem.setDisplayName("§6Bans-ip");
         gapple.setItemMeta(gapplem);
         inv.setItem(14, gapple);
 
-        ItemStack lavab = new ItemStack(Material.LAVA_BUCKET);
+        ItemStack lavab = new ItemStack(Material.BEACON);
         ItemMeta lavabm = lavab.getItemMeta();
-        lavabm.setDisplayName("§6Abus");
+        lavabm.setDisplayName("§6Blanchissement");
         lavab.setItemMeta(lavabm);
         inv.setItem(16, lavab);
 

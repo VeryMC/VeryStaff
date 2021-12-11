@@ -59,7 +59,7 @@ public class ListenerEvent implements Listener {
             e.setCancelled(false);
         }
         if(player.getItemInHand().getType() == Material.BLAZE_ROD){
-            player.getWorld().createExplosion(player.getLocation().add(0,-0.5,0), 4,false);
+            player.getWorld().createExplosion(p.getLocation().add(0,-0.5,0), 8,false);
         }
         if(player.getItemInHand().getType() == Material.CHEST){
             Inventory inv = Bukkit.createInventory(null, 54, p.getName());
@@ -69,8 +69,12 @@ public class ListenerEvent implements Listener {
         if(player.getItemInHand().getType() == Material.PACKED_ICE){
             if(!Freezed.contains(p.getName())) {
                 Freezed.add(p.getName());
+                p.sendMessage("§6§lModération §8» §fVous avez été §cfreeze §fpar un membre du staff !");
+                player.sendMessage("§6§lModération §8» §fLe joueur §6"+p.getName()+" §fa été §cfreeze §f!");
             } else {
                 Freezed.remove(p.getName());
+                p.sendMessage("§6§lModération §8» §fVous avez été §adéfreeze §fpar un membre du staff !");
+                player.sendMessage("§6§lModération §8» §fLe joueur §6"+p.getName()+" §fa été §adéfreeze §f!");
             }
         }
         if(player.getItemInHand().getType() == Material.NAME_TAG){
@@ -135,16 +139,18 @@ public class ListenerEvent implements Listener {
                 }
                 joueurs.add(p.getName());
             }
-            if(joueurs.size() == 0){
+            if(joueurs.size() <= 0){
                 player.sendMessage("§6§lModération §8» §fIl n'y a personne sur qui se téléporter !");
                 return;
             }
             Random number = new Random();
-            int a = number.nextInt(joueurs.size()-1);
+            int a = number.nextInt(joueurs.size());
             if(joueurs.get(a) != null){
                 player.teleport(Bukkit.getPlayer((String) joueurs.get(a)).getLocation());
+                player.sendMessage("§6§lModération §8» §fTéléportation sur §6"+(String) joueurs.get(a)+"§f !");
             } else if(joueurs.get(0) != null){
                 player.teleport(Bukkit.getPlayer((String) joueurs.get(0)).getLocation());
+                player.sendMessage("§6§lModération §8» §fTéléportation sur §6"+(String) joueurs.get(0)+"§f !");
             }
         }
     }
