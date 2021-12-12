@@ -4,6 +4,7 @@ import fr.verymc.Commands.CommandCps;
 import fr.verymc.Commands.CommandMod;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,6 +41,10 @@ public class ListenerEvent implements Listener {
             return;
         }
         if(!(e.getRightClicked() instanceof Player)){
+            return;
+        }
+        if(!(e.getRightClicked() instanceof NPC)){
+            e.setCancelled(true);
             return;
         }
         Player player = e.getPlayer();

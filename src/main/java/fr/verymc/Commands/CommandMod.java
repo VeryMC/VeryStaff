@@ -78,8 +78,8 @@ public class CommandMod implements CommandExecutor {
             ItemStack stick = new ItemStack(Material.STICK);
             ItemMeta stickm = stick.getItemMeta();
             stickm.addEnchant(Enchantment.KNOCKBACK, 2, true);
+            stickm.addEnchant(Enchantment.DURABILITY, 3, true);
             stickm.setDisplayName("§aKnockback 2");
-            stickm.spigot().setUnbreakable(true);
             stick.setItemMeta(stickm);
             player.getInventory().setItem(4, stick);
 
