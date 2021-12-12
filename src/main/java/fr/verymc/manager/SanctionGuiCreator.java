@@ -9,8 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Arrays;
-
 public class SanctionGuiCreator {
 
     public static void MakeMainSGUI(Player player){
@@ -25,24 +23,36 @@ public class SanctionGuiCreator {
         inv.setItem(13, stack);
 
         ItemStack paper = new ItemStack(Material.PAPER);
+        if(!player.hasPermission("s.base.mute")){
+            paper.setType(Material.BARRIER);
+        }
         ItemMeta paperm = paper.getItemMeta();
         paperm.setDisplayName("§6Mutes");
         paper.setItemMeta(paperm);
         inv.setItem(10, paper);
 
         ItemStack ironsword = new ItemStack(Material.ARROW);
+        if(!player.hasPermission("s.base.ban")){
+            ironsword.setType(Material.BARRIER);
+        }
         ItemMeta ironswordm = ironsword.getItemMeta();
         ironswordm.setDisplayName("§6Bans");
         ironsword.setItemMeta(ironswordm);
         inv.setItem(11, ironsword);
 
         ItemStack gapple = new ItemStack(Material.BOW);
+        if(!player.hasPermission("s.base.banip")){
+            gapple.setType(Material.BARRIER);
+        }
         ItemMeta gapplem = gapple.getItemMeta();
         gapplem.setDisplayName("§6Bans-ip");
         gapple.setItemMeta(gapplem);
         inv.setItem(15, gapple);
 
         ItemStack lavab = new ItemStack(Material.BEACON);
+        if(!player.hasPermission("s.base.blanchissement")){
+            lavab.setType(Material.BARRIER);
+        }
         ItemMeta lavabm = lavab.getItemMeta();
         lavabm.setDisplayName("§6Blanchissement");
         lavab.setItemMeta(lavabm);
@@ -52,6 +62,7 @@ public class SanctionGuiCreator {
     }
 
     public static void MakeMuteGUI(Player player){
+        if(!player.hasPermission("s.base.mute")) return;
         String cible = CommandS.target.get(player.getName());
         Inventory inv = Bukkit.createInventory(null, 27, "§8Mutes pour "+cible);
 
@@ -120,6 +131,7 @@ public class SanctionGuiCreator {
         player.openInventory(inv);
     }
     public static void makeBanGUI(Player player){
+        if(!player.hasPermission("s.base.ban")) return;
         String cible = CommandS.target.get(player.getName());
         Inventory inv = Bukkit.createInventory(null, 27, "§8Bans pour "+cible);
 
@@ -200,6 +212,7 @@ public class SanctionGuiCreator {
         player.openInventory(inv);
     }
     public static void MakeBanIpGui(Player player){
+        if(!player.hasPermission("s.base.banip")) return;
         String cible = CommandS.target.get(player.getName());
         Inventory inv = Bukkit.createInventory(null, 27, "§8Bans-ip pour "+cible);
 
@@ -232,6 +245,7 @@ public class SanctionGuiCreator {
         player.openInventory(inv);
     }
     public static void MakeBlanchissementGUI(Player player){
+        if(!player.hasPermission("s.base.blanchissement")) return;
         String cible = CommandS.target.get(player.getName());
         Inventory inv = Bukkit.createInventory(null, 27, "§8Blanchissements pour "+cible);
 
