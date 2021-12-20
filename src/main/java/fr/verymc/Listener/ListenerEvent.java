@@ -2,14 +2,15 @@ package fr.verymc.Listener;
 
 import fr.verymc.Commands.CommandCps;
 import fr.verymc.Commands.CommandMod;
+import fr.verymc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,17 +22,27 @@ import java.util.Random;
 public class ListenerEvent implements Listener {
 
     public static ArrayList<String> Freezed = new ArrayList<String>();
+    public static ArrayList<String> tmp = new ArrayList<String>();
+    public static ArrayList<String> tmp1 = new ArrayList<String>();
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e){
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            return;
+        }
         if(Freezed.contains(e.getPlayer().getName())){
             e.setCancelled(true);
         }
     }
     @EventHandler
     public void PreCommand(PlayerCommandPreprocessEvent e){
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            return;
+        }
         if(Freezed.contains(e.getPlayer().getName())){
-            e.setCancelled(true);
+            if(!e.getMessage().contains("/freeze")) {
+                e.setCancelled(true);
+            }
         }
     }
 
@@ -43,7 +54,7 @@ public class ListenerEvent implements Listener {
         if(!(e.getRightClicked() instanceof Player)){
             return;
         }
-        if(!(e.getRightClicked() instanceof NPC)){
+        if(e.getRightClicked().hasMetadata("NPC")){
             e.setCancelled(true);
             return;
         }
@@ -58,29 +69,49 @@ public class ListenerEvent implements Listener {
         Player p = (Player) e.getRightClicked();
 
         if(player.getItemInHand().getType() == Material.WATCH) {
-            player.chat("/cps " + p.getName());
-        }
-        if(player.getItemInHand().getType() == Material.STICK){
-            e.setCancelled(false);
-        }
-        if(player.getItemInHand().getType() == Material.CHEST){
-            Inventory inv = Bukkit.createInventory(null, 54, p.getName());
-            inv.setContents(p.getInventory().getContents());
-            player.openInventory(inv);
-        }
-        if(player.getItemInHand().getType() == Material.PACKED_ICE){
-            if(!Freezed.contains(p.getName())) {
-                Freezed.add(p.getName());
-                p.sendMessage("§6§lModération §8» §fVous avez été §cfreeze §fpar un membre du staff !");
-                player.sendMessage("§6§lModération §8» §fLe joueur §6"+p.getName()+" §fa été §cfreeze §f!");
+            if (tmp1.contains(player.getName())) {
+                return;
             } else {
-                Freezed.remove(p.getName());
-                p.sendMessage("§6§lModération §8» §fVous avez été §adéfreeze §fpar un membre du staff !");
-                player.sendMessage("§6§lModération §8» §fLe joueur §6"+p.getName()+" §fa été §adéfreeze §f!");
+                tmp1.add(player.getName());
+                player.chat("/cps " + p.getName());
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
+                    public void run() {
+                        tmp1.remove(player.getName());
+                    }
+                }, 1);
             }
         }
-        if(player.getItemInHand().getType() == Material.NAME_TAG){
-            player.chat("/s "+p.getName());
+            if (player.getItemInHand().getType() == Material.STICK) {
+                e.setCancelled(true);
+            }
+            if (player.getItemInHand().getType() == Material.CHEST) {
+                Inventory inv = Bukkit.createInventory(null, 54, p.getName());
+                inv.setContents(p.getInventory().getContents());
+                player.openInventory(inv);
+            }
+            if (player.getItemInHand().getType() == Material.PACKED_ICE) {
+                if (tmp.contains(player.getName())) {
+                    return;
+                } else {
+                    tmp.add(player.getName());
+                    if (!Freezed.contains(p.getName())) {
+                        Freezed.add(p.getName());
+                        p.sendMessage("§6§lModération §8» §fVous avez été §cfreeze §fpar un membre du staff !");
+                        player.sendMessage("§6§lModération §8» §fLe joueur §6" + p.getName() + " §fa été §cfreeze §f!");
+                    } else {
+                        Freezed.remove(p.getName());
+                        p.sendMessage("§6§lModération §8» §fVous avez été §adéfreeze §fpar un membre du staff !");
+                        player.sendMessage("§6§lModération §8» §fLe joueur §6" + p.getName() + " §fa été §adéfreeze §f!");
+                    }
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
+                        public void run() {
+                            tmp.remove(player.getName());
+                        }
+                    }, 1);
+                }
+            }
+                if (player.getItemInHand().getType() == Material.NAME_TAG) {
+                    player.chat("/s " + p.getName());
         }
     }
 

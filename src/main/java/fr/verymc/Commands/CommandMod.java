@@ -1,5 +1,7 @@
 package fr.verymc.Commands;
 
+import com.iridium.iridiumskyblock.api.IridiumSkyblockAPI;
+import fr.verymc.Main;
 import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,12 +21,16 @@ public class CommandMod implements CommandExecutor {
 
     public static void setVanish(Player player, Boolean ison){
         if(ison==false){
-            CommandMod.Vanish.remove(player.getName());
+            if(Vanish.contains(player.getName())) {
+                CommandMod.Vanish.remove(player.getName());
+            }
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.showPlayer(player);
             }
         } else{
-            CommandMod.Vanish.add(player.getName());
+            if(Vanish.contains(player.getName())) {
+                CommandMod.Vanish.remove(player.getName());
+            }
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.hidePlayer(player);
             }
@@ -44,12 +50,14 @@ public class CommandMod implements CommandExecutor {
             player.setAllowFlight(false);
             player.setFlying(false);
             setVanish(player, false);
+            if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(false);
             player.setNoDamageTicks(1);
             IsinMod.remove(player.getName());
             InventoryManager.getInvManager().restoreInv(player);
         } else {
             InventoryManager.getInvManager().saveInv(player);
 
+            if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(true);
             player.setAllowFlight(true);
             player.setFlying(true);
 
