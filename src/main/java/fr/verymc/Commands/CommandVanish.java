@@ -18,14 +18,14 @@ public class CommandVanish implements CommandExecutor {
             player.sendMessage("§6§lModération §8» §cErreur, utilisation /vanish <on/off>");
             return true;
         }
-        if(args[0]!="on" || args[0]!="off"){
+        if(args[0]!="on" && args[0]!="off"){
             return true;
         }
         if(args[0]=="on"){
-            CommandMod.setVanish(player, true);
+            CommandMod.instance.setVanish(player, true);
         }
         if(args[0]=="off"){
-            CommandMod.setVanish(player, false);
+            CommandMod.instance.setVanish(player, false);
         }
 
 

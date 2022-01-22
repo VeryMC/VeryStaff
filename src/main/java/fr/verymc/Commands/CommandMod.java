@@ -13,6 +13,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,15 @@ public class CommandMod implements CommandExecutor {
     public static ArrayList<String> IsinMod = new ArrayList<String>();
     public static ArrayList<String> Vanish = new ArrayList<String>();
 
-    public static void setVanish(Player player, Boolean ison){
+    public static CommandMod instance;
+
+    public CommandMod(){
+        instance=this;
+    }
+
+    Jedis j = null;
+
+    public void setVanish(Player player, Boolean ison){
         if(ison==false){
             if(Vanish.contains(player.getName())) {
                 CommandMod.Vanish.remove(player.getName());
@@ -28,36 +37,39 @@ public class CommandMod implements CommandExecutor {
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.showPlayer(player);
             }
+            try {
+                j = Main.pool.getResource();
+                // If you want to use a password, use
+                j.auth(System.getenv("REDIS_PASSWORD"));
+                j.set("Mod:"+player.getUniqueId(), "false");
+
+            } finally {
+                // Be sure to close it! It can and will cause memory leaks.
+                j.close();
+            }
+
         } else{
-            if(Vanish.contains(player.getName())) {
-                CommandMod.Vanish.remove(player.getName());
+            if(!Vanish.contains(player.getName())) {
+                CommandMod.Vanish.add(player.getName());
             }
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.hidePlayer(player);
             }
+            try {
+                j = Main.pool.getResource();
+                // If you want to use a password, use
+                j.auth(System.getenv("REDIS_PASSWORD"));
+                j.set("Mod:"+player.getUniqueId(), "true");
+
+            } finally {
+                // Be sure to close it! It can and will cause memory leaks.
+                j.close();
+            }
         }
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = (Player) sender;
-        if(!player.hasPermission("mod.use")){
-            player.sendMessage("§4 Vous n'avez pas la permission d'éxécuter cette commande");
-            return true;
-        }
-        if(args.length == 0){
-            player.sendMessage("§4 Veuillez indiquer si vous souhaitez enter ou sortir du /mod. Ex : /mod <on/off>");
-            return true;
-        }
-        if(args[0].equalsIgnoreCase("on") && IsinMod.contains(player.getName())){
-            player.sendMessage(ChatColor.RED+"Vous êtes déja en mode modération.");
-            return true;
-        }
-        if(args[0].equalsIgnoreCase("off") && !IsinMod.contains(player.getName())){
-            player.sendMessage(ChatColor.RED+"Vous n'êtes pas en mode modération.");
-            return true;
-        }
-        if(args[0].equalsIgnoreCase("on") && !IsinMod.contains(player.getName())){
+    public void ToggleMod(Player player, boolean type){
+        if(type==true){
             InventoryManager.getInvManager().saveInv(player);
 
             if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(true);
@@ -122,9 +134,17 @@ public class CommandMod implements CommandExecutor {
             setVanish(player, true);
             IsinMod.add(player.getName());
 
-        }
+            try {
+                j = Main.pool.getResource();
+                // If you want to use a password, use
+                j.auth(System.getenv("REDIS_PASSWORD"));
+                j.set("Mod:"+player.getUniqueId(), "true");
 
-        if(args[0].equalsIgnoreCase("off") && IsinMod.contains(player.getName())){
+            } finally {
+                // Be sure to close it! It can and will cause memory leaks.
+                j.close();
+            }
+        } else{
             player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
             player.getInventory().clear();
             player.setAllowFlight(false);
@@ -134,6 +154,47 @@ public class CommandMod implements CommandExecutor {
             player.setNoDamageTicks(1);
             IsinMod.remove(player.getName());
             InventoryManager.getInvManager().restoreInv(player);
+
+            try {
+                j = Main.pool.getResource();
+                // If you want to use a password, use
+                j.auth(System.getenv("REDIS_PASSWORD"));
+                j.del("Mod:"+player.getUniqueId());
+                Bukkit.broadcastMessage("value: "+j.get("Mod:"+player.getUniqueId()));
+
+            } finally {
+                // Be sure to close it! It can and will cause memory leaks.
+                j.close();
+            }
+        }
+
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Player player = (Player) sender;
+        if(!player.hasPermission("mod.use")){
+            player.sendMessage("§4 Vous n'avez pas la permission d'éxécuter cette commande");
+            return true;
+        }
+        if(args.length == 0){
+            player.sendMessage("§4 Veuillez indiquer si vous souhaitez enter ou sortir du /mod. Ex : /mod <on/off>");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("on") && IsinMod.contains(player.getName())){
+            player.sendMessage(ChatColor.RED+"Vous êtes déja en mode modération.");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("off") && !IsinMod.contains(player.getName())){
+            player.sendMessage(ChatColor.RED+"Vous n'êtes pas en mode modération.");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("on") && !IsinMod.contains(player.getName())){
+            ToggleMod(player, true);
+        }
+
+        if(args[0].equalsIgnoreCase("off") && IsinMod.contains(player.getName())){
+            ToggleMod(player, false);
         }
 
 

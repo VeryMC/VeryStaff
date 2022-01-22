@@ -3,6 +3,7 @@ package fr.verymc.Listener;
 import fr.verymc.Commands.CommandCps;
 import fr.verymc.Commands.CommandMod;
 import fr.verymc.Main;
+import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,6 +26,8 @@ public class ListenerEvent implements Listener {
     public static ArrayList<String> Freezed = new ArrayList<String>();
     public static ArrayList<String> tmp = new ArrayList<String>();
     public static ArrayList<String> tmp1 = new ArrayList<String>();
+
+    Jedis j = null;
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e){
@@ -48,6 +52,7 @@ public class ListenerEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void InteractAtEntity(PlayerInteractAtEntityEvent e){
+        if(!CommandMod.IsinMod.contains(e.getPlayer().getName())) return;
         if(!e.getPlayer().hasPermission("mod.use")){
             return;
         }
@@ -139,7 +144,7 @@ public class ListenerEvent implements Listener {
         }
         if(e.getMaterial() == Material.INK_SACK){
             if(!CommandMod.Vanish.contains(e.getPlayer().getName())){
-                CommandMod.setVanish(player, true);
+                CommandMod.instance.setVanish(player, true);
                 player.sendMessage("§6§lModération §8» §fVanish §aactivé §f!");
                 ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 10);
                 ItemMeta a = item.getItemMeta();
@@ -148,7 +153,7 @@ public class ListenerEvent implements Listener {
                 player.getInventory().setItemInHand(item);
                 return;
             } else {
-                CommandMod.setVanish(player, false);
+                CommandMod.instance.setVanish(player, false);
                 player.sendMessage("§6§lModération §8» §fVanish §cdéactivé §f!");
                 ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 8);
                 ItemMeta a = item.getItemMeta();
@@ -159,7 +164,7 @@ public class ListenerEvent implements Listener {
             }
         }
         if(e.getMaterial() == Material.REDSTONE){
-            player.chat("/mod");
+            player.chat("/mod off");
         }
         if(e.getMaterial() == Material.ARROW){
             ArrayList joueurs = new ArrayList();
@@ -189,12 +194,30 @@ public class ListenerEvent implements Listener {
     }
     @EventHandler
     public void onJoinEvent(PlayerJoinEvent e){
-        for (String p : CommandMod.Vanish) e.getPlayer().hidePlayer(Bukkit.getPlayer(p));
+        Player player = e.getPlayer();
+        for (String p : CommandMod.Vanish) player.hidePlayer(Bukkit.getPlayer(p));
+        try {
+            j = Main.pool.getResource();
+            // If you want to use a password, use
+            j.auth(System.getenv("REDIS_PASSWORD"));
+            String returned = j.get("Mod:"+player.getUniqueId());
+            Bukkit.broadcastMessage(returned);
+            if(returned != null){
+                CommandMod.instance.ToggleMod(player, true);
+            }
+            e.setJoinMessage(null);
+
+        } finally {
+            // Be sure to close it! It can and will cause memory leaks.
+            j.close();
+        }
     }
     @EventHandler
     public void onLeaveEvent(PlayerQuitEvent e){
         if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
-            e.getPlayer().chat("/mod");
+            InventoryManager.getInvManager().restoreInv(e.getPlayer());
+            CommandMod.IsinMod.remove(e.getPlayer().getName());
+            if(CommandMod.Vanish.contains(e.getPlayer().getName())) CommandMod.Vanish.remove(e.getPlayer().getName());
         }
     }
 }

@@ -35,7 +35,6 @@ public class InventoryManager implements Listener {
         p.getInventory().clear();
         p.getInventory().setContents(inventoryHasmap.get(p.getName())[0]);
         p.getInventory().setArmorContents(inventoryHasmap.get(p.getName())[1]);
-        inventoryHasmap.remove(p.getName());
         p.updateInventory();
         removeInvManager(p);
     }
