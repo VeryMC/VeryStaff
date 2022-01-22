@@ -37,6 +37,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        CommandMod.IsinMod.clear();
         System.out.println("Plugin éteint !");
     }
 }
