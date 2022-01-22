@@ -192,7 +192,7 @@ public class ListenerEvent implements Listener {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onJoinEvent(PlayerJoinEvent e){
         Player player = e.getPlayer();
         for (String p : CommandMod.Vanish) player.hidePlayer(Bukkit.getPlayer(p));
@@ -203,17 +203,18 @@ public class ListenerEvent implements Listener {
             String returned = j.get("Mod:"+player.getUniqueId());
             if(returned != null){
                 CommandMod.instance.ToggleMod(player, true);
+                e.setJoinMessage(null);
             }
-            e.setJoinMessage(null);
 
         } finally {
             // Be sure to close it! It can and will cause memory leaks.
             j.close();
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onLeaveEvent(PlayerQuitEvent e){
         if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            e.setQuitMessage(null);
             InventoryManager.getInvManager().restoreInv(e.getPlayer());
             CommandMod.IsinMod.remove(e.getPlayer().getName());
             if(CommandMod.Vanish.contains(e.getPlayer().getName())) CommandMod.Vanish.remove(e.getPlayer().getName());
