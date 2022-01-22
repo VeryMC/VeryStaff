@@ -4,6 +4,7 @@ import com.iridium.iridiumskyblock.api.IridiumSkyblockAPI;
 import fr.verymc.Main;
 import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -44,17 +45,19 @@ public class CommandMod implements CommandExecutor {
             player.sendMessage("§4 Vous n'avez pas la permission d'éxécuter cette commande");
             return true;
         }
-        if(IsinMod.contains(player.getName())){
-            player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
-            player.getInventory().clear();
-            player.setAllowFlight(false);
-            player.setFlying(false);
-            setVanish(player, false);
-            if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(false);
-            player.setNoDamageTicks(1);
-            IsinMod.remove(player.getName());
-            InventoryManager.getInvManager().restoreInv(player);
-        } else {
+        if(args.length == 0){
+            player.sendMessage("§4 Veuillez indiquer si vous souhaitez enter ou sortir du /mod. Ex : /mod <on/off>");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("on") && IsinMod.contains(player.getName())){
+            player.sendMessage(ChatColor.RED+"Vous êtes déja en mode modération.");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("off") && !IsinMod.contains(player.getName())){
+            player.sendMessage(ChatColor.RED+"Vous n'êtes pas en mode modération.");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("on") && !IsinMod.contains(player.getName())){
             InventoryManager.getInvManager().saveInv(player);
 
             if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(true);
@@ -118,7 +121,21 @@ public class CommandMod implements CommandExecutor {
             player.sendMessage("§6§lModération §8» §fVous §aentrez §fen mode Modération !");
             setVanish(player, true);
             IsinMod.add(player.getName());
+
         }
+
+        if(args[0].equalsIgnoreCase("off") && IsinMod.contains(player.getName())){
+            player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
+            player.getInventory().clear();
+            player.setAllowFlight(false);
+            player.setFlying(false);
+            setVanish(player, false);
+            if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(false);
+            player.setNoDamageTicks(1);
+            IsinMod.remove(player.getName());
+            InventoryManager.getInvManager().restoreInv(player);
+        }
+
 
 
         return false;
