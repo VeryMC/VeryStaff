@@ -201,7 +201,6 @@ public class ListenerEvent implements Listener {
             // If you want to use a password, use
             j.auth(System.getenv("REDIS_PASSWORD"));
             String returned = j.get("Mod:"+player.getUniqueId());
-            Bukkit.broadcastMessage(returned);
             if(returned != null){
                 CommandMod.instance.ToggleMod(player, true);
             }
