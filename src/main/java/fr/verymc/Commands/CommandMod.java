@@ -13,6 +13,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ public class CommandMod implements CommandExecutor {
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.showPlayer(player);
             }
+            player.removeMetadata("vanished", Main.instance);
             try {
                 j = Main.pool.getResource();
                 // If you want to use a password, use
@@ -55,6 +59,7 @@ public class CommandMod implements CommandExecutor {
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.hidePlayer(player);
             }
+            player.setMetadata("vanished", new FixedMetadataValue(Main.instance,"true"));
             try {
                 j = Main.pool.getResource();
                 // If you want to use a password, use
@@ -137,6 +142,8 @@ public class CommandMod implements CommandExecutor {
             setVanish(player, true);
             IsinMod.add(player.getName());
 
+            player.setMetadata("mod", new FixedMetadataValue(Main.instance,"true"));
+
             try {
                 j = Main.pool.getResource();
                 // If you want to use a password, use
@@ -149,6 +156,10 @@ public class CommandMod implements CommandExecutor {
             }
         } else{
             player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
+            player.removeMetadata("mod", Main.instance);
+            if(player.getMetadata("vanished") != null){
+                player.removeMetadata("vanished", Main.instance);
+            }
             player.getInventory().clear();
             player.setAllowFlight(false);
             player.setFlying(false);
