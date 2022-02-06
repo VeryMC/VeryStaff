@@ -157,9 +157,6 @@ public class CommandMod implements CommandExecutor {
         } else{
             player.sendMessage("§6§lModération §8» §fVous §csortez§f du mode Modération !");
             player.removeMetadata("mod", Main.instance);
-            if(player.getMetadata("vanished") != null){
-                player.removeMetadata("vanished", Main.instance);
-            }
             player.getInventory().clear();
             player.setAllowFlight(false);
             player.setFlying(false);
