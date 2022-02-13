@@ -29,7 +29,7 @@ public class ListenerEvent implements Listener {
 
     Jedis j = null;
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void PlayerMove(PlayerMoveEvent e){
         if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
             return;

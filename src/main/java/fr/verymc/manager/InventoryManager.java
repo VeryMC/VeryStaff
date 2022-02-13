@@ -38,7 +38,7 @@ public class InventoryManager implements Listener {
         p.updateInventory();
         removeInvManager(p);
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void InventoryClickEvent(InventoryClickEvent e){
         Player player = (Player) e.getWhoClicked();
         if(!CommandS.target.containsKey(player.getName())){

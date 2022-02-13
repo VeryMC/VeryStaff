@@ -33,9 +33,7 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
+                        <goals><goal>shade</goal></goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
@@ -72,16 +70,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.CobbleSword</groupId>
-            <artifactId>NachoSpigot</artifactId>
+            <groupId>com.github.CobbleSword.NachoSpigot</groupId>
+            <artifactId>api</artifactId>
             <version>LATEST</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>3.16.3</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
