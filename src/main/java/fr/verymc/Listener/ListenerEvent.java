@@ -121,6 +121,13 @@ public class ListenerEvent implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    public void onInteractEvent(PlayerPickupItemEvent e){
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onInteractEvent(PlayerInteractEvent e){
         if(Freezed.contains(e.getPlayer().getName())){
             e.setCancelled(true);
@@ -200,8 +207,10 @@ public class ListenerEvent implements Listener {
             j.auth(System.getenv("REDIS_PASSWORD"));
             String returned = j.get("Mod:"+player.getUniqueId());
             if(returned != null){
-                CommandMod.instance.ToggleMod(player, true);
-                e.setJoinMessage(null);
+                if(returned.equalsIgnoreCase("true")) {
+                    CommandMod.instance.ToggleMod(player, true);
+                    e.setJoinMessage(null);
+                }
             }
 
         } finally {

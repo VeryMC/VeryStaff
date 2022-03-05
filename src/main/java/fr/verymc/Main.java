@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryManager(), this);
         getCommand("mod").setExecutor(new CommandMod());
         getCommand("cps").setExecutor(new CommandCps());
-        getCommand("s").setExecutor(new CommandS());
+        //getCommand("s").setExecutor(new CommandS());
         getCommand("freeze").setExecutor(new CommandFreeze());
         getCommand("vanish").setExecutor(new CommandVanish());
 
