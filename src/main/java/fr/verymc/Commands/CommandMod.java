@@ -46,11 +46,11 @@ public class CommandMod implements CommandExecutor {
                 // If you want to use a password, use
                 j.auth(System.getenv("REDIS_PASSWORD"));
                 j.set("Mod:"+player.getUniqueId(), "false");
-
             } finally {
                 // Be sure to close it! It can and will cause memory leaks.
                 j.close();
             }
+            player.sendMessage("§6§lModération §8» §fVanish §cdésactivé §f!");
 
         } else{
             if(!Vanish.contains(player.getName())) {
@@ -65,11 +65,11 @@ public class CommandMod implements CommandExecutor {
                 // If you want to use a password, use
                 j.auth(System.getenv("REDIS_PASSWORD"));
                 j.set("Mod:"+player.getUniqueId(), "true");
-
             } finally {
                 // Be sure to close it! It can and will cause memory leaks.
                 j.close();
             }
+            player.sendMessage("§6§lModération §8» §fVanish §aactivé §f!");
         }
     }
 

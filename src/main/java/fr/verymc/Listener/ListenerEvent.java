@@ -145,7 +145,6 @@ public class ListenerEvent implements Listener {
         if(e.getMaterial() == Material.INK_SACK){
             if(!CommandMod.Vanish.contains(e.getPlayer().getName())){
                 CommandMod.instance.setVanish(player, true);
-                player.sendMessage("§6§lModération §8» §fVanish §aactivé §f!");
                 ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 10);
                 ItemMeta a = item.getItemMeta();
                 a.setDisplayName("§aVanish actif");
@@ -154,7 +153,6 @@ public class ListenerEvent implements Listener {
                 return;
             } else {
                 CommandMod.instance.setVanish(player, false);
-                player.sendMessage("§6§lModération §8» §fVanish §cdéactivé §f!");
                 ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 8);
                 ItemMeta a = item.getItemMeta();
                 a.setDisplayName("§cVanish inactif");
