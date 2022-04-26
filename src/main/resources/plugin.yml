@@ -2,7 +2,7 @@ name: VeryStaff
 version: '${project.version}'
 main: fr.verymc.Main
 authors: [ Farmeurimmo, seyfle ]
-softdepend: [ IridiumSkyblock, Citizens ]
+softdepend: [ Citizens ]
 commands:
   mod:
     permission: mod.use

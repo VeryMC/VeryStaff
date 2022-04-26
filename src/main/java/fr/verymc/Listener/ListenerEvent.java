@@ -5,13 +5,17 @@ import fr.verymc.Commands.CommandMod;
 import fr.verymc.Main;
 import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -204,12 +208,12 @@ public class ListenerEvent implements Listener {
         try {
             j = Main.pool.getResource();
             // If you want to use a password, use
-            j.auth(System.getenv("REDIS_PASSWORD"));
             String returned = j.get("Mod:"+player.getUniqueId());
             if(returned != null){
                 if(returned.equalsIgnoreCase("true")) {
                     CommandMod.instance.ToggleMod(player, true);
                     e.setJoinMessage(null);
+                    e.getPlayer().setGameMode(GameMode.CREATIVE);
                 }
             }
 
@@ -227,4 +231,23 @@ public class ListenerEvent implements Listener {
             if(CommandMod.Vanish.contains(e.getPlayer().getName())) CommandMod.Vanish.remove(e.getPlayer().getName());
         }
     }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBreakEvent(BlockBreakEvent e){
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            e.setCancelled(true);
+        }
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDropEvent(PlayerDropItemEvent e){
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
+            e.setCancelled(true);
+        }
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onClickItemEvent(InventoryClickEvent e){
+        if(e.getInventory().getType().equals(InventoryType.CREATIVE) && CommandMod.IsinMod.contains(e.getWhoClicked().getName())){
+            e.setCancelled(true);
+        }
+    }
+
 }

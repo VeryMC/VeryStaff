@@ -1,6 +1,6 @@
 package fr.verymc.Commands;
 
-import com.iridium.iridiumskyblock.api.IridiumSkyblockAPI;
+
 import fr.verymc.Main;
 import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
@@ -44,7 +44,7 @@ public class CommandMod implements CommandExecutor {
             try {
                 j = Main.pool.getResource();
                 // If you want to use a password, use
-                j.auth(System.getenv("REDIS_PASSWORD"));
+
                 j.set("Mod:"+player.getUniqueId(), "false");
             } finally {
                 // Be sure to close it! It can and will cause memory leaks.
@@ -77,7 +77,6 @@ public class CommandMod implements CommandExecutor {
         if(type==true){
             InventoryManager.getInvManager().saveInv(player);
 
-            if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(true);
             player.setAllowFlight(true);
             player.setFlying(true);
 
@@ -161,7 +160,6 @@ public class CommandMod implements CommandExecutor {
             player.setAllowFlight(false);
             player.setFlying(false);
             setVanish(player, false);
-            if(Main.isSkyblock)IridiumSkyblockAPI.getInstance().getUser(player).setBypassing(false);
             player.setNoDamageTicks(1);
             IsinMod.remove(player.getName());
             InventoryManager.getInvManager().restoreInv(player);
