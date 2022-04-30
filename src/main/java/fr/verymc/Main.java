@@ -33,7 +33,7 @@ public final class Main extends JavaPlugin {
         getCommand("vanish").setExecutor(new CommandVanish());
 
         new CommandMod();
-        pool = new JedisPool("127.0.0.1", 6379);
+        pool = new JedisPool(System.getenv("REDIS_HOST"), 6379);
 
         System.out.println("Démarrage terminé en " + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()-time)+"."+
                 TimeUnit.MILLISECONDS.toMillis(System.currentTimeMillis()-time)+" !");

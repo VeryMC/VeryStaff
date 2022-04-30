@@ -30,7 +30,7 @@ public class CommandMod implements CommandExecutor {
         instance=this;
     }
 
-    Jedis j = null;
+    public Jedis j = null;
 
     public void setVanish(Player player, Boolean ison){
         if(ison==false){
@@ -44,6 +44,7 @@ public class CommandMod implements CommandExecutor {
             try {
                 j = Main.pool.getResource();
                 // If you want to use a password, use
+                j.auth(System.getenv("REDIS_PASSWORD"));
 
                 j.set("Mod:"+player.getUniqueId(), "false");
             } finally {
@@ -81,7 +82,7 @@ public class CommandMod implements CommandExecutor {
             player.setFlying(true);
 
             player.setNoDamageTicks(999999999);
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("VeryStaff"), new Runnable() {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
                 public void run() {
                     player.getInventory().clear();
 

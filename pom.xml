@@ -69,6 +69,7 @@
             <groupId>com.github.CobbleSword.NachoSpigot</groupId>
             <artifactId>api</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
@@ -80,14 +81,14 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>3.0.0</version>
+            <version>4.2.2</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.16.3</version>
+            <version>3.17.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -207,6 +207,7 @@ public class ListenerEvent implements Listener {
         for (String p : CommandMod.Vanish) player.hidePlayer(Bukkit.getPlayer(p));
         try {
             j = Main.pool.getResource();
+            j.auth(System.getenv("REDIS_PASSWORD"));
             // If you want to use a password, use
             String returned = j.get("Mod:"+player.getUniqueId());
             if(returned != null){
