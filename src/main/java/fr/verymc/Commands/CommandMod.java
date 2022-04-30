@@ -5,6 +5,7 @@ import fr.verymc.Main;
 import fr.verymc.manager.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -80,6 +81,8 @@ public class CommandMod implements CommandExecutor {
 
             player.setAllowFlight(true);
             player.setFlying(true);
+
+            player.setGameMode(org.bukkit.GameMode.CREATIVE);
 
             player.setNoDamageTicks(999999999);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
@@ -161,6 +164,7 @@ public class CommandMod implements CommandExecutor {
             player.setAllowFlight(false);
             player.setFlying(false);
             setVanish(player, false);
+            player.setGameMode(GameMode.SURVIVAL);
             player.setNoDamageTicks(1);
             IsinMod.remove(player.getName());
             InventoryManager.getInvManager().restoreInv(player);

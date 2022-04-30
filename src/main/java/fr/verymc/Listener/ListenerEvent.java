@@ -161,7 +161,6 @@ public class ListenerEvent implements Listener {
                 a.setDisplayName("§aVanish actif");
                 item.setItemMeta(a);
                 player.getInventory().setItemInHand(item);
-                return;
             } else {
                 CommandMod.instance.setVanish(player, false);
                 ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 8);
@@ -169,8 +168,8 @@ public class ListenerEvent implements Listener {
                 a.setDisplayName("§cVanish inactif");
                 item.setItemMeta(a);
                 player.getInventory().setItemInHand(item);
-                return;
             }
+            return;
         }
         if(e.getMaterial() == Material.REDSTONE){
             player.chat("/mod off");
@@ -214,7 +213,6 @@ public class ListenerEvent implements Listener {
                 if(returned.equalsIgnoreCase("true")) {
                     CommandMod.instance.ToggleMod(player, true);
                     e.setJoinMessage(null);
-                    e.getPlayer().setGameMode(GameMode.CREATIVE);
                 }
             }
 
@@ -247,6 +245,13 @@ public class ListenerEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClickItemEvent(InventoryClickEvent e){
         if(e.getInventory().getType().equals(InventoryType.CREATIVE) && CommandMod.IsinMod.contains(e.getWhoClicked().getName())){
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onMoveEvent(PlayerPickupItemEvent e){
+        if(CommandMod.IsinMod.contains(e.getPlayer().getName())){
             e.setCancelled(true);
         }
     }
